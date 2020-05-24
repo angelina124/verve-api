@@ -29,5 +29,15 @@ router.route('/:uid')
       })
     }).catch((err) => console.log(err))
   })
+  .get((req, res) => {
+    const { uid } = req.params
+    User.findById(uid).populate("todos").exec((err, userDoc) => {
+      if (err) {
+        res.json({ error: true })
+      } else {
+        res.json({ data: userDoc.todos })
+      }
+    })
+  })
 
 module.exports = router
