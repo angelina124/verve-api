@@ -23,7 +23,7 @@ var UserSchema = new Schema({
   ],
   completedTodos: [{
     type: Schema.ObjectId,
-    ref: 'CompletedTodo',
+    ref: 'Todo',
     required: false
   }],
   rewards: [
