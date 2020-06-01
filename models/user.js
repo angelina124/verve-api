@@ -14,16 +14,9 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  todos: [
-    {
-      type: Schema.ObjectId,
-      ref: 'Todo',
-      required: false
-    }
-  ],
-  completedTodos: [{
+  todoLists: [{
     type: Schema.ObjectId,
-    ref: 'Todo',
+    ref: 'TodoList',
     required: false
   }],
   rewards: [
@@ -33,7 +26,6 @@ var UserSchema = new Schema({
       required: false
     }
   ]
-
 });
 
 // Export Mongoose model

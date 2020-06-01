@@ -13,6 +13,7 @@ const bcrypt = require('bcrypt')
 const Todo = require('../models/todo')
 const Reward = require('../models/reward')
 const User = require('../models/user')
+const TodoList = require('../models/todolist')
 
 router.route('/')
   // create a user
@@ -20,19 +21,28 @@ router.route('/')
     const { username, password } = req.body
     const hashed_pw = bcrypt.hashSync(password, 10)
 
-    var user = new User({
-      username,
-      password: hashed_pw
+    var defaultList = new TodoList({
+      title: "Default"
     })
 
-    user.save((err, userDoc) => {
-      if (err) {
-        res.json({ error: true })
-      } else {
-        res.json({ user: userDoc })
-      }
+    defaultList.save((err, todoList) => {
+      if (err) res.json({ error: true })
+      var user = new User({
+        username,
+        password: hashed_pw,
+        todoLists: [defaultList]
+      })
+
+      user.save((err, userDoc) => {
+        if (err) {
+          res.json({ error: true })
+        } else {
+          res.json({ user: userDoc })
+        }
+      })
     })
   })
+
 
 router.route('/login')
   .get((req, res) => {

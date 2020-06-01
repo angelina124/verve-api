@@ -3,9 +3,9 @@ const { Schema, model } = mongoose
 
 // Define todo schema
 var TodoSchema = new Schema({
-  user: {
+  todoList: {
     type: Schema.ObjectId,
-    ref: 'User',
+    ref: 'TodoList',
     required: true
   },
   text: {

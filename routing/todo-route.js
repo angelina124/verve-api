@@ -11,11 +11,11 @@ const bcrypt = require('bcrypt')
 
 // import models
 const Todo = require('../models/todo')
+const TodoList = require('../models/todolist')
 const Reward = require('../models/reward')
-const User = require('../models/user')
 
-const removeFromUser = (id, uid) => {
-  User.findByIdAndUpdate(uid,
+const removeFromTodoList = (id, tid) => {
+  TodoList.findByIdAndUpdate(tid,
     {
       $pull: {
         "todos": {
@@ -33,8 +33,8 @@ const removeFromUser = (id, uid) => {
   })
 }
 
-const completeTodo = (id, uid) => {
-  User.findByIdAndUpdate(uid,
+const completeTodo = (id, tid) => {
+  TodoList.findByIdAndUpdate(tid,
     {
       $pull: {
         "todos": {
@@ -56,30 +56,30 @@ const completeTodo = (id, uid) => {
 }
 
 router.route('/:id')
-  //id is the user's id
+  //id is the todolist's id
   .post((req, res) => {
     const { id } = req.params
     const { text, points } = req.body
     if (!text || !points) res.json({ error: true })
-    const todo = { user: id, text, points }
+    const todo = { todoList: id, text, points }
     Todo.create(todo).then(todoDoc => {
-      User.findByIdAndUpdate(id,
+      TodoList.findByIdAndUpdate(id,
         { $push: { todos: todoDoc._id } },
         { new: true, useFindAndModify: false }
       ).then(() => {
         res.json({ success: true, data: todoDoc })
       })
-    }).catch((err) => res.json({ error=true, err }))
+    }).catch((err) => res.json({ error: true, err }))
   })
-  // id is the user's id
-  // returns a list of the users todos
+  // id is the todolist's id
+  // returns a list of the todolist's todos
   .get((req, res) => {
     const { id } = req.params
-    User.findById(id).populate("todos").exec((err, userDoc) => {
+    TodoList.findById(id).populate("todos").exec((err, todoListDoc) => {
       if (err) {
         res.json({ error: true })
       } else {
-        res.json({ todos: userDoc.todos })
+        res.json({ todos: todoListDoc.todos })
       }
     })
   })
@@ -88,10 +88,10 @@ router.route('/:id')
     const { id } = req.params
     Todo.findByIdAndDelete(id).then(todoDoc => {
       if (!todoDoc) res.json({ error: true })
-      const uid = todoDoc.user
-      const updated = { ...removeFromUser(id, uid), todoDoc }
+      const tid = todoDoc.todoList
+      const updated = { ...removeFromTodoList(id, tid), todoDoc }
       res.json(updated)
-    }).catch((err) => res.json({ error=true, err }))
+    }).catch((err) => res.json({ error: true, err }))
   })
 router.route('/complete/:id')
   .post((req, res) => {
@@ -99,8 +99,8 @@ router.route('/complete/:id')
     Todo.findById(id).then((todoDoc) => {
       if (!todoDoc) res.json({ error: true })
       else {
-        const uid = todoDoc.user
-        const updated = { ...completeTodo(id, uid), todoDoc }
+        const tid = todoDoc.todoList
+        const updated = { ...completeTodo(id, tid), todoDoc }
         res.json(updated)
       }
     }).catch((err) => res.json({ error: true, err }))
