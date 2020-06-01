@@ -29,6 +29,7 @@ app.use(bodyParser.json())
 
 app.use('/api/users/', require('./routing/user-route'))
 app.use('/api/todos/', require('./routing/todo-route'))
+app.use('/api/rewards/', require('./routing/reward-route'))
 
 // creates express server
 app.listen(3000, () => {

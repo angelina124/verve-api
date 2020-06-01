@@ -6,13 +6,9 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Types
 
-// bcrypt for password hashing
-const bcrypt = require('bcrypt')
-
 // import models
 const Todo = require('../models/todo')
 const TodoList = require('../models/todolist')
-const Reward = require('../models/reward')
 
 const removeFromTodoList = (id, tid) => {
   TodoList.findByIdAndUpdate(tid,
@@ -66,7 +62,7 @@ router.route('/:id')
       TodoList.findByIdAndUpdate(id,
         { $push: { todos: todoDoc._id } },
         { new: true, useFindAndModify: false }
-      ).then(() => {
+      ).exec().then(() => {
         res.json({ success: true, data: todoDoc })
       })
     }).catch((err) => res.json({ error: true, err }))
@@ -86,7 +82,7 @@ router.route('/:id')
   //id is the todo's id
   .delete((req, res) => {
     const { id } = req.params
-    Todo.findByIdAndDelete(id).then(todoDoc => {
+    Todo.findByIdAndDelete(id).exec().then(todoDoc => {
       if (!todoDoc) res.json({ error: true })
       const tid = todoDoc.todoList
       const updated = { ...removeFromTodoList(id, tid), todoDoc }
@@ -96,7 +92,7 @@ router.route('/:id')
 router.route('/complete/:id')
   .post((req, res) => {
     const { id } = req.params
-    Todo.findById(id).then((todoDoc) => {
+    Todo.findById(id).exec().then((todoDoc) => {
       if (!todoDoc) res.json({ error: true })
       else {
         const tid = todoDoc.todoList

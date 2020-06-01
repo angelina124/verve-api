@@ -8,6 +8,10 @@ var RewardSchema = new Schema({
     ref: 'User',
     required: true
   },
+  text: {
+    type: String,
+    required: true
+  },
   points: {
     type: Number,
     required: true
