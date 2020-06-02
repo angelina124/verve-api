@@ -1,11 +1,14 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const bodyParser = require('body-parser')
+require('dotenv').config()
 
 // set up cors to allow cross-origin requests
 const cors = require('cors')
 
-if (!mongoose.connection.db) {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/your-app-name');
+
+/*if (!mongoose.connection.db) {
   console.log("connecting")
   mongoose.connect(
     "mongodb+srv://angelina:JTapdc43qlrrxqy3@cluster0-x45de.mongodb.net/test?retryWrites=true&w=majority",
@@ -17,7 +20,7 @@ if (!mongoose.connection.db) {
       useFindAndModify: false
     }
   )
-}
+}*/
 
 // Initialize http server
 const app = express()
@@ -32,6 +35,5 @@ app.use('/api/todos/', require('./routing/todo-route'))
 app.use('/api/rewards/', require('./routing/reward-route'))
 
 // creates express server
-app.listen(3000, () => {
-  console.log('listening on 3000')
-})
+const port = process.env.PORT || 3000;
+app.listen(port);
