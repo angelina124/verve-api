@@ -6,7 +6,7 @@ require('dotenv').config()
 // set up cors to allow cross-origin requests
 const cors = require('cors')
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/your-app-name');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/verve-api');
 
 /*if (!mongoose.connection.db) {
   console.log("connecting")
