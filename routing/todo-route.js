@@ -79,6 +79,7 @@ router.route('/:id')
       }
     })
   })
+router.route('/delete/:id')
   //id is the todo's id
   .delete((req, res) => {
     const { id } = req.params

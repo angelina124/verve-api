@@ -6,6 +6,7 @@ require('dotenv').config()
 // set up cors to allow cross-origin requests
 const cors = require('cors')
 
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/verve-api');
 
 /*if (!mongoose.connection.db) {
@@ -34,6 +35,8 @@ app.use('/api/users/', require('./routing/user-route'))
 app.use('/api/todos/', require('./routing/todo-route'))
 app.use('/api/rewards/', require('./routing/reward-route'))
 
-// creates express server
 const port = process.env.PORT || 3000;
-app.listen(port);
+// creates express server
+app.listen(port, () => {
+  console.log('listening on 3000')
+})
