@@ -58,10 +58,12 @@ router.route('/login')
           let hash = user.password
           if (bcrypt.compareSync(password, hash)) {
             res.json({
-              _id: user._id,
-              username: user.username,
-              todos: user.todos,
-              rewards: user.rewards
+              user: {
+                _id: user._id,
+                username: user.username,
+                todos: user.todos,
+                rewards: user.rewards
+              }
             })
           } else {
             res.json({ error: true })
