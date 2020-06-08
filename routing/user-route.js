@@ -45,13 +45,13 @@ router.route('/')
 
 
 router.route('/login')
-  .get((req, res) => {
+  .post((req, res) => {
     const { username, password } = req.body
     if (!username && !password) {
       res.json({ error: true, message: "Could not log in" })
     }
     else {
-      User.findOne({ username }).exec((err, user) => {
+      User.findOne({ username }).populate("todoLists").populate("rewards").exec((err, user) => {
         if (err) {
           res.json({ error: true })
         } else {
@@ -61,7 +61,7 @@ router.route('/login')
               user: {
                 _id: user._id,
                 username: user.username,
-                todos: user.todos,
+                todoLists: user.todoLists,
                 rewards: user.rewards
               }
             })
