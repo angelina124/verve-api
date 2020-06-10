@@ -7,12 +7,12 @@ require('dotenv').config()
 const cors = require('cors')
 
 
-//mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/verve-api');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/verve-api');
 
-if (!mongoose.connection.db) {
+/*if (!mongoose.connection.db) {
   console.log("connecting")
   mongoose.connect(
-    process.env.MONGODB_URI,
+    "mongodb+srv://angelina:JTapdc43qlrrxqy3@cluster0-x45de.mongodb.net/test?retryWrites=true&w=majority",
     {
       keepAlive: true,
       reconnectTries: Number.MAX_VALUE,
@@ -21,7 +21,7 @@ if (!mongoose.connection.db) {
       useFindAndModify: false
     }
   )
-}
+}*/
 
 // Initialize http server
 const app = express()
