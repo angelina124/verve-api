@@ -65,7 +65,7 @@ router.route('/:id')
       ).exec().then(() => {
         return res.json({ success: true, data: todoDoc })
       })
-    }).catch((err) => return res.json({ error: true, err }))
+    }).catch((err) => res.json({ error: true, err }))
   })
   // id is the todolist's id
   // returns a list of the todolist's todos
@@ -88,7 +88,7 @@ router.route('/delete/:id')
       const tid = todoDoc.todoList
       const updated = { ...removeFromTodoList(id, tid), todoDoc }
       return res.json(updated)
-    }).catch((err) => return res.json({ error: true, err }))
+    }).catch((err) => res.json({ error: true, err }))
   })
 router.route('/complete/:id')
   .post((req, res) => {
@@ -100,7 +100,7 @@ router.route('/complete/:id')
         const updated = { ...completeTodo(id, tid), todoDoc }
         return res.json(updated)
       }
-    }).catch((err) => return res.json({ error: true, err }))
+    }).catch((err) => res.json({ error: true, err }))
   })
 
 module.exports = router
