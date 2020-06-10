@@ -21,7 +21,7 @@ router.route('/')
     const { username, password } = req.body
 
     if (!username || !password) {
-      res.json({ error: true, message: "Could not log in" })
+      return res.json({ error: true, message: "Could not log in" })
     }
     const hashed_pw = bcrypt.hashSync(password, 10)
 
@@ -31,7 +31,7 @@ router.route('/')
     })
 
     defaultList.save((err, todoList) => {
-      if (err) res.json({ error: true })
+      if (err) return res.json({ error: true })
       var user = new User({
         username,
         password: hashed_pw,
@@ -40,9 +40,9 @@ router.route('/')
 
       user.save((err, userDoc) => {
         if (err) {
-          res.json({ error: true })
+          return res.json({ error: true })
         } else {
-          res.json({ user: userDoc })
+          return res.json({ user: userDoc })
         }
       })
     })
@@ -53,7 +53,7 @@ router.route('/login')
   .post((req, res) => {
     const { username, password } = req.body
     if (!username || !password) {
-      res.json({ error: true, message: "Could not log in" })
+      return res.json({ error: true, message: "Could not log in" })
     }
     else {
       User.findOne({ username }).populate("todoLists").populate("rewards").exec((err, user) => {
@@ -62,7 +62,7 @@ router.route('/login')
         } else {
           let hash = user.password
           if (bcrypt.compareSync(password, hash)) {
-            res.json({
+            return res.json({
               user: {
                 _id: user._id,
                 username: user.username,
@@ -71,7 +71,7 @@ router.route('/login')
               }
             })
           } else {
-            res.json({ error: true })
+            return res.json({ error: true })
           }
         }
       })

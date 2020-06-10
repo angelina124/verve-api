@@ -15,17 +15,17 @@ router.route("/:uid")
   .post((req, res) => {
     const { uid } = req.params
     const { text, points } = req.body
-    if (!text || !points) res.json({ error: true })
+    if (!text || !points) return res.json({ error: true })
     const reward = new Reward({ user: uid, text, points })
     reward.save((err, rewardDoc) => {
       console.log(rewardDoc)
-      if (err) res.json({ error: true, err })
+      if (err) return res.json({ error: true, err })
       User.findByIdAndUpdate(uid,
         { $push: { rewards: rewardDoc._id } },
         { new: true, useFindAndModify: false }
       ).exec().then(() => {
         console.log("success")
-        res.json({ success: true, data: rewardDoc })
+        return res.json({ success: true, data: rewardDoc })
       })
     })
   })
@@ -33,9 +33,9 @@ router.route("/:uid")
     const { uid } = req.params
     User.findById(uid).populate("rewards").exec((err, userDoc) => {
       if (err) {
-        res.json({ error: true })
+        return res.json({ error: true })
       } else {
-        res.json({ rewards: userDoc.rewards })
+        return res.json({ rewards: userDoc.rewards })
       }
     })
   })

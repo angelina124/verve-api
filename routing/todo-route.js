@@ -56,16 +56,16 @@ router.route('/:id')
   .post((req, res) => {
     const { id } = req.params
     const { text, points } = req.body
-    if (!text || !points) res.json({ error: true })
+    if (!text || !points) return res.json({ error: true })
     const todo = { todoList: id, text, points }
     Todo.create(todo).then(todoDoc => {
       TodoList.findByIdAndUpdate(id,
         { $push: { todos: todoDoc._id } },
         { new: true, useFindAndModify: false }
       ).exec().then(() => {
-        res.json({ success: true, data: todoDoc })
+        return res.json({ success: true, data: todoDoc })
       })
-    }).catch((err) => res.json({ error: true, err }))
+    }).catch((err) => return res.json({ error: true, err }))
   })
   // id is the todolist's id
   // returns a list of the todolist's todos
@@ -73,9 +73,9 @@ router.route('/:id')
     const { id } = req.params
     TodoList.findById(id).populate("todos").exec((err, todoListDoc) => {
       if (err) {
-        res.json({ error: true })
+        return res.json({ error: true })
       } else {
-        res.json({ todos: todoListDoc.todos })
+        return res.json({ todos: todoListDoc.todos })
       }
     })
   })
@@ -84,23 +84,23 @@ router.route('/delete/:id')
   .delete((req, res) => {
     const { id } = req.params
     Todo.findByIdAndDelete(id).exec().then(todoDoc => {
-      if (!todoDoc) res.json({ error: true })
+      if (!todoDoc) return res.json({ error: true })
       const tid = todoDoc.todoList
       const updated = { ...removeFromTodoList(id, tid), todoDoc }
-      res.json(updated)
-    }).catch((err) => res.json({ error: true, err }))
+      return res.json(updated)
+    }).catch((err) => return res.json({ error: true, err }))
   })
 router.route('/complete/:id')
   .post((req, res) => {
     const { id } = req.params
     Todo.findById(id).exec().then((todoDoc) => {
-      if (!todoDoc) res.json({ error: true })
+      if (!todoDoc) return res.json({ error: true })
       else {
         const tid = todoDoc.todoList
         const updated = { ...completeTodo(id, tid), todoDoc }
-        res.json(updated)
+        return res.json(updated)
       }
-    }).catch((err) => res.json({ error: true, err }))
+    }).catch((err) => return res.json({ error: true, err }))
   })
 
 module.exports = router
