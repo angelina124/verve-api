@@ -19,7 +19,12 @@ router.route('/')
   // create a user
   .post((req, res) => {
     const { username, password } = req.body
+
+    if (!username || !password) {
+      res.json({ error: true, message: "Could not log in" })
+    }
     const hashed_pw = bcrypt.hashSync(password, 10)
+
 
     var defaultList = new TodoList({
       title: "Default"
@@ -47,7 +52,7 @@ router.route('/')
 router.route('/login')
   .post((req, res) => {
     const { username, password } = req.body
-    if (!username && !password) {
+    if (!username || !password) {
       res.json({ error: true, message: "Could not log in" })
     }
     else {
