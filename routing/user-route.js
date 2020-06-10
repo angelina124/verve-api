@@ -84,9 +84,9 @@ router.route('/:id')
   .get((req, res) => {
     User.findById(req.params.id).populate("todos").exec((err, user) => {
       if (err) {
-        res.json({ error: true })
+        return res.json({ error: true })
       } else {
-        res.json({
+        return res.json({
           _id: user._id,
           username: user.username,
           todos: user.todos,
