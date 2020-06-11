@@ -35,7 +35,7 @@ router.route('/')
       var user = new User({
         username,
         password: hashed_pw,
-        todoLists: [defaultList]
+        todolists: [defaultList]
       })
 
       user.save((err, userDoc) => {
@@ -56,7 +56,7 @@ router.route('/login')
       return res.json({ error: true, message: "Could not log in" })
     }
     else {
-      User.findOne({ username }).populate("todoLists").populate("rewards").exec((err, user) => {
+      User.findOne({ username }).populate("todolists").populate("rewards").exec((err, user) => {
         if (err) {
           res.json({ error: true })
         } else {
@@ -66,7 +66,7 @@ router.route('/login')
               user: {
                 _id: user._id,
                 username: user.username,
-                todoLists: user.todoLists,
+                todolists: user.todolists,
                 rewards: user.rewards
               }
             })

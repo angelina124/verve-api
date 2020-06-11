@@ -14,7 +14,7 @@ var UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  todoLists: [{
+  todolists: [{
     type: Schema.ObjectId,
     ref: 'TodoList',
     required: false
