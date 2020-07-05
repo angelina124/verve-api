@@ -21,10 +21,9 @@ router.route('/')
     const { username, password } = req.body
 
     if (!username || !password) {
-      return res.json({ error: true, message: "Could not log in" })
+      return res.status(400).json({ error: true, message: "Could not sign up" })
     }
     const hashed_pw = bcrypt.hashSync(password, 10)
-
 
     var defaultList = new TodoList({
       title: "Default"
@@ -40,9 +39,9 @@ router.route('/')
 
       user.save((err, userDoc) => {
         if (err) {
-          return res.json({ error: true })
+          return res.status(500).json({ error: true })
         } else {
-          return res.json({ user: userDoc })
+          return res.status(200).json({ user: userDoc })
         }
       })
     })
